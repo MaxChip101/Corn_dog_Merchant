@@ -15,7 +15,7 @@ int randnum(int min, int max) {
 }
 
 int main() {
-    render_text("Welcome to the \"Travelling Corndog Merchant\"");
+    render_text("Welcome to the \"Travelling Corn dog Merchant\"");
 
 
     // seed
@@ -30,13 +30,11 @@ int main() {
     charisma = randnum(0, 100) / 100.0;
     money = randnum(10, 25);
     popularity = randnum(1, 5);
-
-    // creating world using seed
-    corndog_value = 5 * randnum(50, 100) / 100.0;
+    corndogs = 0;
 
     // business name
     name = prompt("What's your name?");
-    business_name = name + "'s Corndogs";
+    business_name = name + "'s Corn dogs";
 
     // initialization
     initialize_shop(randnum);
