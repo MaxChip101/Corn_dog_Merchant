@@ -8,4 +8,6 @@ float charisma;
 int popularity;
 int money;
 
+int corndogs;
+
 int corndog_value;
