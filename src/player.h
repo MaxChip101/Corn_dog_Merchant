@@ -11,6 +11,8 @@ extern float charisma;
 extern int popularity;
 extern int money;
 
+extern int corndogs;
+
 extern int corndog_value;
 
 #endif
