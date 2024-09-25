@@ -156,18 +156,19 @@ string get_money() {
 
 void shop_dialog(int (*func)(int, int)) {
     char choice; 
-    choice = choice3("Shop: What would you like to do?    " + get_money() , "Buy corndog", "Buy advertisement", "Exit shop");
+    choice = choice3("Shop: What would you like to do?    " + get_money() , "Buy corn dog", "Buy advertisement", "Exit shop");
     if(choice == '1') {
-        render_text("A Corndog costs $" + to_string(corndog_price) + " dollars");
+        render_text("Corndogs cost $" + to_string(corndog_price) + " dollars");
         choice = choice2("Are you sure you want to buy this?    " + get_money(), "Yes", "No");
         if(choice == '1') {
             if(money - corndog_price < 0) {
                 render_text("You don't have enough money");
                 shop_dialog(func);
             } else {
-                render_text("Bought 1 Corndog - $" + to_string(corndog_price));
                 money -= corndog_price;
-                if (func(0, 4) == 0) {
+                corndogs += 1;
+                render_text("You now have " + to_string(corndogs) + " corn dogs  -$" + to_string(corndog_price));
+                if (func(0, 8) == 0) {
                     corndog_price += 1;
                 }
                 shop_dialog(func);
@@ -175,7 +176,27 @@ void shop_dialog(int (*func)(int, int)) {
         } else {
             shop_dialog(func);
         }
-    } else if(choice == '1') {
-        render_text("An advertisement costs $" + to_string(advertisement_price) + " dollars (Increases your popularity)");
-    } else {}
+    } else if(choice == '2') {
+        render_text("Advertisements cost $" + to_string(advertisement_price) + " dollars");
+        choice = choice2("Are you sure you want to buy this?    " + get_money(), "Yes", "No");
+        if(choice == '1') {
+            if(money - advertisement_price < 0) {
+                render_text("You don't have enough money");
+                shop_dialog(func);
+            } else {
+                money -= advertisement_price;
+                popularity += 10;
+                render_text("You have gained more popularity  -$" + to_string(advertisement_price));
+                if (func(0, 4) == 0) {
+                    advertisement_price += 2;
+                }
+                shop_dialog(func);
+            }
+        } else {
+            shop_dialog(func);
+        }
+    } else {
+        corndog_value = prompt_int("Set the price of your corndogs");
+        return;
+    }
 }
