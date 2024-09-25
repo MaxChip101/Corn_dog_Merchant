@@ -15,12 +15,4 @@ void initialize_shop(int (*func)(int, int)) {
     advertisement_price = 20 + func(-5, 5);
 }
 
-int buyStock(string item, int amount) {
-    return 0;
-}
-
-
-// player shop
-
-
 
