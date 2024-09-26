@@ -7,13 +7,14 @@
 
 #include "player.h"
 #include "shop.h"
+#include "customer.h"
 
 using namespace std;
 
 // console rendering and inputs
 
+// function to check if a string is a number
 bool isNumeric(const string& str) {
-
     if(str[0] == '-') {
         string str2 = "";
 
@@ -26,15 +27,14 @@ bool isNumeric(const string& str) {
     } else {
         return all_of(str.begin(), str.end(), ::isdigit);
     }
-
-    
 }
 
-
+// waits a certain ammount of milliseconds
 void wait(int milliseconds) {
     this_thread::sleep_for(chrono::milliseconds(milliseconds));
 }
 
+// safe user input
 string input() {
     string inp_str;
     char ch;
@@ -44,6 +44,7 @@ string input() {
     return inp_str;
 }
 
+// render the text character by character
 void render_text(string text) {
     // renders the text one by one
     for(char c : text) {
@@ -55,6 +56,7 @@ void render_text(string text) {
     cout << endl;
 }
 
+// prompt a string text
 string prompt(string text) {
     // render the prompt text
     render_text(text);
@@ -68,6 +70,8 @@ string prompt(string text) {
     return s;
 }
 
+
+// prompt a number
 int prompt_int(string text) {
     // render the prompt text
     render_text(text);
@@ -150,21 +154,28 @@ char choice4(string text, string _choice1, string _choice2, string _choice3, str
     return '0';
 }
 
+// embeds the player's money into a string
 string get_money() {
     return "($" + to_string(money) + ")";
 }
 
 void shop_dialog(int (*func)(int, int)) {
-    char choice; 
+    char choice;
+    // shop: corn dog, advertisement, exit shop
     choice = choice3("Shop: What would you like to do?    " + get_money() , "Buy corn dog", "Buy advertisement", "Exit shop");
+
+    // corn dog
     if(choice == '1') {
         render_text("Corndogs cost $" + to_string(corndog_price) + " dollars");
         choice = choice2("Are you sure you want to buy this?    " + get_money(), "Yes", "No");
+
+        // yes
         if(choice == '1') {
             if(money - corndog_price < 0) {
                 render_text("You don't have enough money");
                 shop_dialog(func);
             } else {
+                // TODO: make corn dogs and advertisements be able to bulk sell
                 money -= corndog_price;
                 corndogs += 1;
                 render_text("You now have " + to_string(corndogs) + " corn dogs  -$" + to_string(corndog_price));
@@ -173,12 +184,17 @@ void shop_dialog(int (*func)(int, int)) {
                 }
                 shop_dialog(func);
             }
+        // no
         } else {
             shop_dialog(func);
         }
+    
+    // advertisement
     } else if(choice == '2') {
         render_text("Advertisements cost $" + to_string(advertisement_price) + " dollars");
         choice = choice2("Are you sure you want to buy this?    " + get_money(), "Yes", "No");
+
+        // yes
         if(choice == '1') {
             if(money - advertisement_price < 0) {
                 render_text("You don't have enough money");
@@ -192,11 +208,19 @@ void shop_dialog(int (*func)(int, int)) {
                 }
                 shop_dialog(func);
             }
+
+        // no
         } else {
             shop_dialog(func);
         }
+
+    // exit shop
     } else {
-        corndog_value = prompt_int("Set the price of your corndogs");
+        corndog_value = prompt_int("Set the price of your corndogs; Current Price: $" + to_string(corndog_value));
         return;
     }
+}
+
+void customer_dialog(Character customer) {
+
 }

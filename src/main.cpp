@@ -34,7 +34,7 @@ int main() {
 
     // business name
     name = prompt("What's your name?");
-    business_name = name + "'s Corn dogs";
+    business_name = name + "'s Corn Dogs";
 
     // initialization
     initialize_shop(randnum);
