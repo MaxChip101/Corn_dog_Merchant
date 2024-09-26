@@ -183,7 +183,7 @@ void shop_dialog(int (*func)(int, int)) {
                     corndog_price += 1;
                 }
                 shop_dialog(func);
-            } 
+            }
         // no
         } else {
             shop_dialog(func);
