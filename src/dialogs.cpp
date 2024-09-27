@@ -159,6 +159,22 @@ string get_money() {
     return "($" + to_string(money) + ")";
 }
 
+void endings(string ending) {
+    if(ending == "gabe") {
+        render_text("GAME ENDED: Gabe Newell Ending");
+    } else if(ending == "exile") {
+        render_text("GAME ENDED: Exiled Ending");
+    } else if(ending == "killed") {
+        render_text("GAME ENDED: Murdered Ending");
+    } else if(ending == "broke") {
+        render_text("GAME ENDED: Bankrupt Ending");
+    } else if(ending == "rich") {
+        render_text("GAME ENDED: Monopoly Ending");
+    }
+    input();
+    return;
+}
+
 void shop_dialog(int (*func)(int, int), Character customer) {
     char choice;
     // shop: corn dog, advertisement, exit shop
@@ -316,18 +332,3 @@ void customer_dialog(Character customer, string dialog_choice, int (*func)(int, 
     
 }
 
-void endings(string ending) {
-    if(ending == "gabe") {
-        render_text("GAME ENDED: Gabe Newell Ending");
-    } else if(ending == "exile") {
-        render_text("GAME ENDED: Exiled Ending");
-    } else if(ending == "killed") {
-        render_text("GAME ENDED: Murdered Ending");
-    } else if(ending == "broke") {
-        render_text("GAME ENDED: Bankrupt Ending");
-    } else if(ending == "rich") {
-        render_text("GAME ENDED: Monopoly Ending");
-    }
-    input();
-    return;
-}
