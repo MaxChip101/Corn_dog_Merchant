@@ -159,7 +159,7 @@ string get_money() {
     return "($" + to_string(money) + ")";
 }
 
-void shop_dialog(int (*func)(int, int)) {
+void shop_dialog(int (*func)(int, int), Character customer) {
     char choice;
     // shop: corn dog, advertisement, exit shop
     choice = choice3("Shop: What would you like to do?    " + get_money() , "Buy corn dog", "Buy advertisement", "Exit shop");
@@ -173,7 +173,7 @@ void shop_dialog(int (*func)(int, int)) {
         if(choice == '1') {
             if(money - corndog_price < 0) {
                 render_text("You don't have enough money");
-                shop_dialog(func);
+                shop_dialog(func, customer);
             } else {
                 // TODO: make corn dogs and advertisements be able to bulk sell
                 money -= corndog_price;
@@ -182,11 +182,11 @@ void shop_dialog(int (*func)(int, int)) {
                 if (func(0, 8) == 0) {
                     corndog_price += 1;
                 }
-                shop_dialog(func);
+                shop_dialog(func, customer);
             }
         // no
         } else {
-            shop_dialog(func);
+            shop_dialog(func, customer);
         }
     
     // advertisement
@@ -198,7 +198,7 @@ void shop_dialog(int (*func)(int, int)) {
         if(choice == '1') {
             if(money - advertisement_price < 0) {
                 render_text("You don't have enough money");
-                shop_dialog(func);
+                shop_dialog(func, customer);
             } else {
                 money -= advertisement_price;
                 popularity += 10;
@@ -206,21 +206,128 @@ void shop_dialog(int (*func)(int, int)) {
                 if (func(0, 4) == 0) {
                     advertisement_price += 2;
                 }
-                shop_dialog(func);
+                shop_dialog(func, customer);
             }
 
         // no
         } else {
-            shop_dialog(func);
+            shop_dialog(func, customer);
         }
 
     // exit shop
     } else {
         corndog_value = prompt_int("Set the price of your corndogs; Current Price: $" + to_string(corndog_value));
-        return;
+        sell_dialog(customer, func);
     }
 }
 
-void customer_dialog(Character customer) {
+void sell_dialog(Character customer, int (*func)(int, int)) {
+    char choice;
+    render_text(customer.name + " walks up to your stand");
+    choice = choice4("What do you do?", "Sell Corn Dog", "Small Talk", "Go To Shop", "Turn Down");
+    if(choice == '1') {
+        customer_dialog(customer, "sell", func);
+    } else if(choice == '2') {
+        customer_dialog(customer, "talk", func);
+    } else if(choice == '3') {
+       shop_dialog(func, customer);
+       sell_dialog(customer, func);
+    } else if(choice == '4') {
+        customer_dialog(customer, "reject", func);
+    }
+}
 
+void customer_dialog(Character customer, string dialog_choice, int (*func)(int, int)) {
+    if(dialog_choice == "talk" && customer.mood <= 0) {
+        say(customer, "I don't want to talk right now");
+        return;
+    }
+
+    if(customer.isGabe) {
+        if(dialog_choice == "sell") {
+            endings("gabe");
+        } else if(dialog_choice == "talk") {
+            say(customer, "That was a excelent conversation");
+        } else if(dialog_choice == "reject") {
+            render_text(customer.name + " has left your stand");
+            sell_dialog(create_character(func), func);
+        }
+    } else {
+        if(customer.isMale) {
+            if(customer.royalty) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else if(customer.peasant) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            }
+        } else {
+            if(customer.royalty) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else if(customer.peasant) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            }
+        }
+    }
+    
+}
+
+void endings(string ending) {
+    if(ending == "gabe") {
+        render_text("GAME ENDED: Gabe Newell Ending");
+    } else if(ending == "exile") {
+        render_text("GAME ENDED: Exiled Ending");
+    } else if(ending == "killed") {
+        render_text("GAME ENDED: Murdered Ending");
+    } else if(ending == "broke") {
+        render_text("GAME ENDED: Bankrupt Ending");
+    } else if(ending == "rich") {
+        render_text("GAME ENDED: Monopoly Ending");
+    }
+    input();
+    return;
 }

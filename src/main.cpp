@@ -46,6 +46,6 @@ int main() {
     wait(1000);
     render_text("You start off your business with: $" +  to_string(money) + " dollars");
     wait(1000);
-    shop_dialog(randnum);
+    shop_dialog(randnum, create_character(randnum));
 
 }

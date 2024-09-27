@@ -4,6 +4,7 @@
 
 #include "customer.h"
 #include "shop.h"
+#include "dialog.h"
 
 using namespace std;
 
@@ -29,6 +30,9 @@ string royal_male[] = {
     "King", "Lord", "Emperor", "Prince", "Duke", "Baron", "Marquis"
 };
 
+void say(Character customer, string text) {
+    render_text(customer.name + " says: \"" + text + "\"");
+}
 
 // create character
 Character create_character(int (*func)(int, int)) {
@@ -36,9 +40,9 @@ Character create_character(int (*func)(int, int)) {
 
     if(func(0, 100) == 0) {
         c.isGabe = true;
-        c.money = 1000000;
         c.royalty = true;
         c.happiness = 1;
+        c.price_acceptance = 10000000;
         c.mood = 0;
         c.hunger = 0.4;
         c.isMale = true;
@@ -49,13 +53,7 @@ Character create_character(int (*func)(int, int)) {
         } else if(func(0, 5) == 0) {
             c.peasant = true;
         }
-        if(c.royalty) {
-            c.money = func(200, 500);
-        } else if(c.peasant) {
-            c.money = func(0, 20);
-        } else {
-            c.money = func(40, 100);
-        }
+
         if(func(0, 1) == 0) {
             c.isMale = true;
         }
@@ -66,27 +64,29 @@ Character create_character(int (*func)(int, int)) {
         if(c.royalty) {
             if(c.isMale) {
                 c.name = royal_male[func(0, 6)] + " " + males[func(0, 14)];
+                c.price_acceptance = func(16, 30);
             } else {
                 c.name = royal_female[func(0, 5)] + " " + females[func(0, 14)];
+                c.price_acceptance = func(15, 30);
+            }
+        } else if(c.peasant) { 
+            if(c.isMale) {
+                c.price_acceptance = func(9, 17);
+            } else {
+                c.price_acceptance = func(8, 18);
             }
         } else {
             if(c.isMale) {
                 c.name = males[func(0, 14)] + " " + males[func(0, 14)];
+                c.price_acceptance = func(12, 22);
             } else {
                 c.name = females[func(0, 14)] + " " + females[func(0, 14)];
+                c.price_acceptance = func(10, 20);
             }
         }
     }
 
     cout << c.name << endl;
     return c;
-}
-
-// sell an item to a customer
-int sell(Character customer, string item) {
-    if(customer.money < 0) {
-
-    }
-    return 0;
 }
 

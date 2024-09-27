@@ -13,13 +13,15 @@ struct Character {
     bool royalty = false;
     bool peasant = false;
     bool isMale = false;
+    int price_acceptance;
     float hunger = 0;
     float mood = 0;
     float happiness = 0;
-    int money = 0;
 };
 
 Character create_character(int (*func)(int, int));
+
+void say(Character customer, string text);
 
 int sell(Character customer, string item);
 
