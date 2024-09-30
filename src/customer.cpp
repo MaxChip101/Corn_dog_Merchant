@@ -43,8 +43,7 @@ Character create_character(int (*func)(int, int)) {
         c.royalty = true;
         c.happiness = 1;
         c.price_acceptance = 10000000;
-        c.mood = 0;
-        c.hunger = 0.4;
+        c.mood = 1;
         c.isMale = true;
         c.name = "Gabe Newell";
     } else {
@@ -57,7 +56,6 @@ Character create_character(int (*func)(int, int)) {
         if(func(0, 1) == 0) {
             c.isMale = true;
         }
-        c.hunger = func(0, 100) / 100.0;
         c.mood = func(0, 100) / 100.0;
         c.happiness = func(0, 100) / 100.0;
 
@@ -86,7 +84,6 @@ Character create_character(int (*func)(int, int)) {
         }
     }
 
-    cout << c.name << endl;
     return c;
 }
 

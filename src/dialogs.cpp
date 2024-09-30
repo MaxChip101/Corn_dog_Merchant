@@ -8,6 +8,8 @@
 #include "player.h"
 #include "shop.h"
 #include "customer.h"
+#include "dialogs2.h"
+#include "dialog.h"
 
 using namespace std;
 
@@ -69,7 +71,6 @@ string prompt(string text) {
     // gets user input
     return s;
 }
-
 
 // prompt a number
 int prompt_int(string text) {
@@ -175,6 +176,102 @@ void endings(string ending) {
     return;
 }
 
+void customer_dialog(Character customer, string dialog_choice, int (*func)(int, int)) {
+    if(dialog_choice == "talk" && customer.mood <= 0) {
+        say(customer, "I don't want to talk right now");
+        return;
+    }
+
+    if(customer.isGabe) {
+        if(dialog_choice == "sell") {
+            if(sellable()) {
+                endings("gabe");
+            } else {
+                
+            }
+        } else if(dialog_choice == "talk") {
+            say(customer, "That was an excellent conversation");
+            sell_dialog(customer, func);
+        } else if(dialog_choice == "reject") {
+            render_text(customer.name + " has left your stand");
+            sell_dialog(create_character(func), func);
+        }
+    } else {
+        if(customer.isMale) {
+            if(customer.royalty) {
+                if(dialog_choice == "sell") {
+                    if(sellable()) {
+                        
+                    } else {
+
+                    }
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else if(customer.peasant) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            }
+        } else {
+            if(customer.royalty) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else if(customer.peasant) {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            } else {
+                if(dialog_choice == "sell") {
+                    endings("gabe");
+                } else if(dialog_choice == "talk") {
+                    say(customer, "That was a excelent conversation");
+                    sell_dialog(customer, func);
+                } else if(dialog_choice == "reject") {
+                    render_text(customer.name + " has left your stand");
+                    sell_dialog(create_character(func), func);
+                }
+            }
+        }
+    }
+    
+}
+
+
+
 void shop_dialog(int (*func)(int, int), Character customer) {
     char choice;
     // shop: corn dog, advertisement, exit shop
@@ -187,13 +284,14 @@ void shop_dialog(int (*func)(int, int), Character customer) {
 
         // yes
         if(choice == '1') {
-            if(money - corndog_price < 0) {
+            int amount = prompt_int("How many corn dogs do you want to buy?");
+            if(money - (corndog_price * amount) < 0) {
                 render_text("You don't have enough money");
                 shop_dialog(func, customer);
             } else {
                 // TODO: make corn dogs and advertisements be able to bulk sell
-                money -= corndog_price;
-                corndogs += 1;
+                money -= corndog_price * amount;
+                corndogs += 1 * amount;
                 render_text("You now have " + to_string(corndogs) + " corn dogs  -$" + to_string(corndog_price));
                 if (func(0, 8) == 0) {
                     corndog_price += 1;
@@ -212,12 +310,13 @@ void shop_dialog(int (*func)(int, int), Character customer) {
 
         // yes
         if(choice == '1') {
-            if(money - advertisement_price < 0) {
+            int amount = prompt_int("How many advertisements do you want to buy?");
+            if(money - (advertisement_price * amount) < 0) {
                 render_text("You don't have enough money");
                 shop_dialog(func, customer);
             } else {
-                money -= advertisement_price;
-                popularity += 10;
+                money -= advertisement_price * amount;
+                popularity += 10 * amount;
                 render_text("You have gained more popularity  -$" + to_string(advertisement_price));
                 if (func(0, 4) == 0) {
                     advertisement_price += 2;
@@ -237,98 +336,4 @@ void shop_dialog(int (*func)(int, int), Character customer) {
     }
 }
 
-void sell_dialog(Character customer, int (*func)(int, int)) {
-    char choice;
-    render_text(customer.name + " walks up to your stand");
-    choice = choice4("What do you do?", "Sell Corn Dog", "Small Talk", "Go To Shop", "Turn Down");
-    if(choice == '1') {
-        customer_dialog(customer, "sell", func);
-    } else if(choice == '2') {
-        customer_dialog(customer, "talk", func);
-    } else if(choice == '3') {
-       shop_dialog(func, customer);
-       sell_dialog(customer, func);
-    } else if(choice == '4') {
-        customer_dialog(customer, "reject", func);
-    }
-}
-
-void customer_dialog(Character customer, string dialog_choice, int (*func)(int, int)) {
-    if(dialog_choice == "talk" && customer.mood <= 0) {
-        say(customer, "I don't want to talk right now");
-        return;
-    }
-
-    if(customer.isGabe) {
-        if(dialog_choice == "sell") {
-            endings("gabe");
-        } else if(dialog_choice == "talk") {
-            say(customer, "That was a excelent conversation");
-        } else if(dialog_choice == "reject") {
-            render_text(customer.name + " has left your stand");
-            sell_dialog(create_character(func), func);
-        }
-    } else {
-        if(customer.isMale) {
-            if(customer.royalty) {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            } else if(customer.peasant) {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            } else {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            }
-        } else {
-            if(customer.royalty) {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            } else if(customer.peasant) {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            } else {
-                if(dialog_choice == "sell") {
-                    endings("gabe");
-                } else if(dialog_choice == "talk") {
-                    say(customer, "That was a excelent conversation");
-                } else if(dialog_choice == "reject") {
-                    render_text(customer.name + " has left your stand");
-                    sell_dialog(create_character(func), func);
-                }
-            }
-        }
-    }
-    
-}
 

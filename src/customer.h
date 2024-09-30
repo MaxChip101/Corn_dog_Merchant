@@ -14,7 +14,6 @@ struct Character {
     bool peasant = false;
     bool isMale = false;
     int price_acceptance;
-    float hunger = 0;
     float mood = 0;
     float happiness = 0;
 };
