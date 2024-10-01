@@ -22,6 +22,6 @@ Character create_character(int (*func)(int, int));
 
 void say(Character customer, string text);
 
-int sell(Character customer, string item);
+bool respectable(Character customer);
 
 #endif

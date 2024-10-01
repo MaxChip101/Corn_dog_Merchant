@@ -5,6 +5,7 @@
 #include "customer.h"
 #include "shop.h"
 #include "dialog.h"
+#include "player.h"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ void say(Character customer, string text) {
 Character create_character(int (*func)(int, int)) {
     Character c;
 
+    // if gabe
     if(func(0, 100) == 0) {
         c.isGabe = true;
         c.royalty = true;
@@ -46,40 +48,56 @@ Character create_character(int (*func)(int, int)) {
         c.mood = 1;
         c.isMale = true;
         c.name = "Gabe Newell";
+    // if regular person
     } else {
+        // royalty
         if(func(0, 10) == 0) {
             c.royalty = true;
+        // peasant
         } else if(func(0, 5) == 0) {
             c.peasant = true;
         }
 
-        if(func(0, 1) == 0) {
+        // male
+        if(func(0, 2) == 0) {
             c.isMale = true;
         }
+        // mood control
         c.mood = func(0, 100) / 100.0;
         c.happiness = func(0, 100) / 100.0;
-
+        
+        // if royalty
         if(c.royalty) {
+            // male
             if(c.isMale) {
                 c.name = royal_male[func(0, 6)] + " " + males[func(0, 14)];
-                c.price_acceptance = func(16, 30);
+                c.price_acceptance = func(7, 14) + popularity;
+            // female
             } else {
                 c.name = royal_female[func(0, 5)] + " " + females[func(0, 14)];
-                c.price_acceptance = func(15, 30);
+                c.price_acceptance = func(6, 12) + popularity;
             }
+        // if peasant
         } else if(c.peasant) { 
-            if(c.isMale) {
-                c.price_acceptance = func(9, 17);
-            } else {
-                c.price_acceptance = func(8, 18);
-            }
-        } else {
+            // male
             if(c.isMale) {
                 c.name = males[func(0, 14)] + " " + males[func(0, 14)];
-                c.price_acceptance = func(12, 22);
+                c.price_acceptance = func(5, 10) + popularity;
+            // female
             } else {
                 c.name = females[func(0, 14)] + " " + females[func(0, 14)];
-                c.price_acceptance = func(10, 20);
+                c.price_acceptance = func(4, 8) + popularity;
+            }
+        // middle class
+        } else {
+            // male
+            if(c.isMale) {
+                c.name = males[func(0, 14)] + " " + males[func(0, 14)];
+                c.price_acceptance = func(3, 6) + popularity;
+            // female
+            } else {
+                c.name = females[func(0, 14)] + " " + females[func(0, 14)];
+                c.price_acceptance = func(2, 5) + popularity;
             }
         }
     }
@@ -87,3 +105,11 @@ Character create_character(int (*func)(int, int)) {
     return c;
 }
 
+// if price is in customer's range
+bool respectable(Character customer) {
+    if(customer.price_acceptance > corndog_value) {
+        return true;
+    } else {
+        return false;
+    }
+}

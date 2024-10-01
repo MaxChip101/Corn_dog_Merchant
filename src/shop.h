@@ -2,7 +2,7 @@
 #define SHOP_H
 
 #include <string>
-#include "customer.h"
+#include "player.h"
 
 using namespace std;
 
@@ -13,5 +13,7 @@ extern int corndog_price;
 extern int advertisement_price;
 
 bool sellable();
+
+void sell();
 
 #endif

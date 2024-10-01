@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// initializing values
 string name;
 string business_name;
 float charisma;

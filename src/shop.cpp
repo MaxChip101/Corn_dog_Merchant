@@ -18,12 +18,18 @@ void initialize_shop(int (*func)(int, int)) {
 
 // player shop
 
+// if corn dog sellable
 bool sellable() {
-    if(corndogs > 0) {
+    if(corndogs >= 1) {
         return true;
     } else {
         return false;
     }
+}
 
+// sell corndog to customer
+void sell() {
+    corndogs -= 1;
+    money += corndog_value;
 }
 

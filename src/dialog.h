@@ -13,6 +13,9 @@ int prompt_int(string text);
 char choice2(string text, string choice1, string choice2);
 char choice3(string text, string choice1, string choice2, string choice3);
 char choice4(string text, string choice1, string choice2, string choice3, string choice4);
+void endings(string ending);
+string get_money();
+string get_corndogs();
 void shop_dialog(int (*func)(int, int), Character character);
 void customer_dialog(Character customer, string dialog_choice, int (*func)(int, int));
 #endif

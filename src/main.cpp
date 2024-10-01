@@ -17,7 +17,6 @@ int randnum(int min, int max) {
 int main() {
     render_text("Welcome to the \"Travelling Corn dog Merchant\"");
 
-
     // seed
     seed = prompt_int("Type a seed (negative number for random)");
     if (seed < 0) {
@@ -29,7 +28,7 @@ int main() {
     // setting up
     charisma = randnum(0, 100) / 100.0;
     money = randnum(10, 25);
-    popularity = randnum(1, 5);
+    popularity = randnum(3, 5);
     corndogs = 0;
 
     // business name
