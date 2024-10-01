@@ -581,7 +581,7 @@ void shop_dialog(int (*func)(int, int), Character customer) {
             } else {
                 money -= corndog_price * amount;
                 corndogs += 1 * amount;
-                render_text("You now have " + to_string(corndogs) + " corn dogs  -$" + to_string(corndog_price));
+                render_text("You now have " + to_string(corndogs) + " corn dogs  -$" + to_string(corndog_price * amount));
                 if (func(0, 8) == 0) {
                     corndog_price += 1;
                 }
@@ -606,7 +606,7 @@ void shop_dialog(int (*func)(int, int), Character customer) {
             } else {
                 money -= advertisement_price * amount;
                 popularity += 10 * amount;
-                render_text("You have gained more popularity  -$" + to_string(advertisement_price));
+                render_text("You have gained more popularity  -$" + to_string(advertisement_price * amount));
                 if (func(0, 4) == 0) {
                     advertisement_price += 10;
                 }
